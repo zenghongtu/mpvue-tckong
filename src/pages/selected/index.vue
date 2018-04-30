@@ -1,6 +1,13 @@
 <template>
   <div>
     <view v-for="(item,key) in image_list" :key="key">{{item.title}}</view>
+    <div v-if="isLoad == 1" class="weui-loadmore">
+      <div class="weui-loading"></div>
+      <div class="weui-loadmore__tips">正在加载</div>
+    </div>
+    <div v-if="isLoad == 2" class="weui-loadmore weui-loadmore_line">
+      <div class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</div>
+    </div>
   </div>
 </template>
 
@@ -13,7 +20,8 @@
     data () {
       return {
         image_list: [],
-        count: 0
+        count: 0,
+        isLoad: 0
       }
     },
     //
@@ -34,30 +42,19 @@
             if (rsp.data.status === 'ok') {
               const _d = rsp.data.data
               if (direction === 'bottom') {
-                // console.log(_d[0]._id)
                 imageList.push(..._d)
               } else {
-                // console.log(imageList[0])
-                // console.log(imageList[0]._id)
                 if (imageList[0]) {
-                // if (_d[0]._id !== imageList[0]._id) {
-                  // const str = JSON.stringify(imageList)
-                  // console.log(imageList)
-
-                  // if (str.search('' + _d[0]._id)) {
                   imageList.unshift(..._d)
-                  console.log('change')
-                  // }
-                // }
                 } else {
                   imageList.push(..._d)
-                  console.log('push ')
                 }
-                console.log(imageList)
               }
+              that.isLoad = 0
               that.count += 10
             } else {
-              console.log('no data')
+              console.log('no new data')
+              that.isLoad = 2
             }
           })
           .catch(function (error) {
@@ -67,11 +64,13 @@
     },
 
     async onPullDownRefresh () { // 下拉刷新
+      this.isLoad = 1
       // this.clearState()
       await this.getSelectedData()
       wx.stopPullDownRefresh()
     },
     onReachBottom () { // 上拉加载
+      this.isLoad = 1
       this.getSelectedData('bottom')
     },
 
