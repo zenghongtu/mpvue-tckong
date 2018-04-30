@@ -36,7 +36,6 @@
       //           if (imageList === []) {
       //             imageList.push(..._d)
       //           } else {
-      //             // todo?
       //             // const len = _d.length
       //             // let f = 0
       //             // for (let i=0;i<len;i++){
@@ -73,6 +72,7 @@
       const p = this.$root.$mp.query.p
       if (!p) {
         return wx.navigateBack()
+        // console.log('error')
       }
       this.p = p
       // this.getMovieData(id)
