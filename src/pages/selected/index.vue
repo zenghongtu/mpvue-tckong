@@ -1,6 +1,8 @@
 <template>
   <div>
-    <view v-for="(item,key) in image_list" :key="key">{{item.title}}</view>
+    <view class="img_wrap_view" v-for="(item,index) in image_list" :key="item._id">
+      <card :image_info="item"></card>
+    </view>
     <div v-if="isLoad == 1" class="weui-loadmore">
       <div class="weui-loading"></div>
       <div class="weui-loadmore__tips">正在加载</div>
@@ -12,7 +14,7 @@
 </template>
 
 <script>
-  // import card from '@/components/card'
+  import card from '@/components/card'
   import Fly from 'flyio/dist/npm/wx'
 
   let fly = new Fly()
@@ -20,38 +22,45 @@
     data () {
       return {
         image_list: [],
+        right_height: 0,
+        left_height: 0,
         count: 0,
         isLoad: 0
       }
     },
-    //
-    // components: {
-    //   card
-    // },
-
+    components: {
+      card
+    },
     methods: {
-      getSelectedData (direction = 'pull') {
+      getSelectedData (direction) {
         const that = this
         const imageList = this.image_list
         let _count = this.count
+        const limit = 10
         if (direction === 'pull') {
           _count = 0
         }
-        fly.get('http://127.0.0.1:9000/api/v1/selected/?token=770fed4ca2aabd20ae9a5dd77471&limit=30&skip=' + _count)
+        fly.get('http://127.0.0.1:9000/api/v1/selected/?token=770fed4ca2aabd20ae9a5dd77471&limit=' + limit + '&skip=' + _count)
           .then(function (rsp) {
             if (rsp.data.status === 'ok') {
               const _d = rsp.data.data
-              if (direction === 'bottom') {
-                imageList.push(..._d)
-              } else {
-                if (imageList[0]) {
-                  imageList.unshift(..._d)
-                } else {
+              if (direction === 'pull') {
+                if (imageList === []) {
                   imageList.push(..._d)
+                } else {
+                  // todo?
+                  // const len = _d.length
+                  // let f = 0
+                  // for (let i=0;i<len;i++){
+                  //   if (_d[i]._id )
+                  // }
+                  imageList.unshift(..._d)
                 }
+              } else {
+                imageList.push(..._d)
               }
               that.isLoad = 0
-              that.count += 10
+              that.count += _d.length
             } else {
               console.log('no new data')
               that.isLoad = 2
@@ -60,13 +69,23 @@
           .catch(function (error) {
             console.log(error)
           })
+      // },
+      // // getPosition (i) {
+      // //   console.log(this.image_list[0].images[0])
+      // //   const h = this.image_list[i].images[0].height
+      // //   if (this.right_height > this.left_height) {
+      // //     this.left_height += h
+      // //     return 1
+      // //   }
+      // //   this.right_height += h
+      // //   return 0
       }
     },
 
     async onPullDownRefresh () { // 下拉刷新
       this.isLoad = 1
       // this.clearState()
-      await this.getSelectedData()
+      await this.getSelectedData('pull')
       wx.stopPullDownRefresh()
     },
     onReachBottom () { // 上拉加载
@@ -83,5 +102,9 @@
 </script>
 
 <style scoped>
-
+  .img_wrap_view{
+    /*column-count:2;*/
+    column-gap: 0px;
+    width: 100%;
+  }
 </style>
