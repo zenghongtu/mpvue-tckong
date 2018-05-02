@@ -1,6 +1,7 @@
 <template>
   <div>
     p:{{p}}
+    <div v-for="i in imgList" :key="i" v-text="i"></div>
   </div>
 </template>
 
@@ -12,7 +13,8 @@
   export default {
     data () {
       return {
-        p: 0
+        p: 0,
+        imgList: []
       }
     },
     // components: {
@@ -75,6 +77,8 @@
         // console.log('error')
       }
       this.p = p
+      const app = getApp()
+      this.imgList = app.globalData.store.imgList
       // this.getMovieData(id)
     }
     // async onPullDownRefresh () { // 下拉刷新

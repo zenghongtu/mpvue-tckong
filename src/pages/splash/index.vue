@@ -1,163 +1,75 @@
-<!--<template>-->
-  <!--<div class="container" @click="clickHandle('test click', $event)">-->
-
-    <!--<div class="userinfo" @click="bindViewTap">-->
-      <!--<img class="userinfo-avatar" v-if="userInfo.avatarUrl" :src="userInfo.avatarUrl" background-size="cover" />-->
-      <!--<div class="userinfo-nickname">-->
-        <!--<card :text="userInfo.nickName"></card>-->
-      <!--</div>-->
-    <!--</div>-->
-
-    <!--<div class="usermotto">-->
-      <!--<div class="user-motto">-->
-        <!--<card :text="motto"></card>-->
-      <!--</div>-->
-    <!--</div>-->
-
-    <!--<form class="form-container">-->
-      <!--<input type="text" class="form-control" v-model="motto" placeholder="v-model" />-->
-      <!--<input type="text" class="form-control" v-model.lazy="motto" placeholder="v-model.lazy" />-->
-    <!--</form>-->
-    <!--<a href="/pages/counter/main" class="counter">去往Vuex示例页面</a>-->
-  <!--</div>-->
-<!--</template>-->
-
-<!--<script>-->
-  <!--import card from '@/components/card'-->
-
-  <!--export default {-->
-    <!--data () {-->
-      <!--return {-->
-        <!--motto: 'Hello World',-->
-        <!--userInfo: {}-->
-      <!--}-->
-    <!--},-->
-
-    <!--components: {-->
-      <!--card-->
-    <!--},-->
-
-    <!--methods: {-->
-      <!--bindViewTap () {-->
-        <!--const url = '../logs/main'-->
-        <!--wx.navigateTo({ url })-->
-      <!--},-->
-      <!--getUserInfo () {-->
-        <!--// 调用登录接口-->
-        <!--wx.login({-->
-          <!--success: () => {-->
-            <!--wx.getUserInfo({-->
-              <!--success: (res) => {-->
-                <!--this.userInfo = res.userInfo-->
-              <!--}-->
-            <!--})-->
-          <!--}-->
-        <!--})-->
-      <!--},-->
-      <!--clickHandle (msg, ev) {-->
-        <!--console.log('clickHandle:', msg, ev)-->
-      <!--}-->
-    <!--},-->
-
-    <!--created () {-->
-      <!--// 调用应用实例的方法获取全局数据-->
-      <!--this.getUserInfo()-->
-    <!--}-->
-  <!--}-->
-<!--</script>-->
-
-<!--<style scoped>-->
-  <!--.userinfo {-->
-    <!--display: flex;-->
-    <!--flex-direction: column;-->
-    <!--align-items: center;-->
-  <!--}-->
-
-  <!--.userinfo-avatar {-->
-    <!--width: 128rpx;-->
-    <!--height: 128rpx;-->
-    <!--margin: 20rpx;-->
-    <!--border-radius: 50%;-->
-  <!--}-->
-
-  <!--.userinfo-nickname {-->
-    <!--color: #aaa;-->
-  <!--}-->
-
-  <!--.usermotto {-->
-    <!--margin-top: 150px;-->
-  <!--}-->
-
-  <!--.form-control {-->
-    <!--display: block;-->
-    <!--padding: 0 12px;-->
-    <!--margin-bottom: 5px;-->
-    <!--border: 1px solid #ccc;-->
-  <!--}-->
-
-  <!--.counter {-->
-    <!--display: inline-block;-->
-    <!--margin: 10px auto;-->
-    <!--padding: 5px 10px;-->
-    <!--color: blue;-->
-    <!--border: 1px solid blue;-->
-  <!--}-->
-<!--</style>-->
-
 <template>
-  <div class="page">
-    <view class="page__hd">
-      <view class="page__title">Swiper</view>
-      <view class="page__desc">滑块视图容器，这里采用小程序原生 swiper 组件实现。</view>
-    </view>
-    <div class="page__bd page__bd_spacing">
-      <swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">
-        <div v-for="item in imgUrls" :key="index">
-          <swiper-item>
-            <image :src="item" class="slide-image" />
-          </swiper-item>
-        </div>
-      </swiper>
-            <button class="md-splash__start" @click="handleStart">立即体验</button>
-    </div>
+  <div class="page_wrap">
+    <image :class="isfull ? 'img_full':'img_no_full'" @click="handleStart" :src="url" mode="widthFix"/>
+    <button class="splash_start" @click="handleStart">立即体验</button>
   </div>
 </template>
 
 <script>
+  import Fly from 'flyio/dist/npm/wx'
+
+  let fly = new Fly()
+
   export default {
     data () {
       return {
-        indicatorDots: true,
-        autoplay: true,
-        interval: 5000,
-        duration: 900,
-        circular: true,
-        imgUrls: [
-          'http://img02.tooopen.com/images/20150928/tooopen_sy_143912755726.jpg',
-          'http://img06.tooopen.com/images/20160818/tooopen_sy_175866434296.jpg',
-          'http://img06.tooopen.com/images/20160818/tooopen_sy_175833047715.jpg'
-        ]
+        isfull: true,
+        url: ''
       }
     },
     methods: {
-      swiperChange (e) {
-        console.log('第' + e.mp.detail.current + '张轮播图发生了滑动')
-      },
-      animationfinish (e) {
-        console.log('第' + e.mp.detail.current + '张轮播图滑动结束')
-      },
       handleStart (e) {
         wx.switchTab({
           url: '../selected/main'
         })
       }
+    },
+    created () {
+      const that = this
+      fly.get('http://127.0.0.1:9000/api/v1/wallpaper/?token=770fed4ca2aabd20ae9a5dd77471')
+        .then(function (rsp) {
+          if (rsp.data.status === 'ok') {
+            const _d = rsp.data.data
+            const _img = _d[0].images[0]
+            _img.height > _img.width ? that.isfull = true : that.isfull = false
+            that.url = 'https://photo.tuchong.com/' + _img.user_id + '/f/' + _img.img_id + '.jpg'
+          } else {
+            console.log('status is error')
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   }
+
 </script>
 
 <style>
-  .slide-image {
+  .page_wrap {
+    height: 100vh;
     width: 100%;
+    background-color: rgba(238, 238, 238,0.2);
+    position: relative;
+  }
+
+  .img_full {
     height: 100%;
+    width: 100%;
+  }
+  .img_no_full {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .splash_start {
+    position: absolute;
+    bottom: 100rpx;
+    left: 50%;
+    color: #7A7A7A;
+    transform: translateX(-50%);
+    background-color: rgba(251, 251, 251, 0.6);
   }
 </style>

@@ -69,16 +69,6 @@
           .catch(function (error) {
             console.log(error)
           })
-      // },
-      // // getPosition (i) {
-      // //   console.log(this.image_list[0].images[0])
-      // //   const h = this.image_list[i].images[0].height
-      // //   if (this.right_height > this.left_height) {
-      // //     this.left_height += h
-      // //     return 1
-      // //   }
-      // //   this.right_height += h
-      // //   return 0
       }
     },
 
@@ -93,7 +83,7 @@
       this.getSelectedData('bottom')
     },
 
-    created () {
+    mounted () {
       // 调用应用实例的方法获取全局数据
       this.getSelectedData()
     }
