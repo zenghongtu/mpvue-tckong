@@ -1,7 +1,7 @@
 <template>
   <div>
     p:{{p}}
-    <div v-for="i in imgList" :key="i" v-text="i"></div>
+    <div v-for="i in imgUrlList" :key="i" v-text="i"></div>
   </div>
 </template>
 
@@ -21,65 +21,24 @@
     //   card
     // },
     methods: {
-
-      // getSelectedData (direction) {
-      //   const that = this
-      //   const imageList = this.image_list
-      //   let _count = this.count
-      //   const limit = 10
-      //   if (direction === 'pull') {
-      //     _count = 0
-      //   }
-      //   fly.get('http://127.0.0.1:9000/api/v1/selected/?token=770fed4ca2aabd20ae9a5dd77471&limit=' + limit + '&skip=' + _count)
-      //     .then(function (rsp) {
-      //       if (rsp.data.status === 'ok') {
-      //         const _d = rsp.data.data
-      //         if (direction === 'pull') {
-      //           if (imageList === []) {
-      //             imageList.push(..._d)
-      //           } else {
-      //             // const len = _d.length
-      //             // let f = 0
-      //             // for (let i=0;i<len;i++){
-      //             //   if (_d[i]._id )
-      //             // }
-      //             imageList.unshift(..._d)
-      //           }
-      //         } else {
-      //           imageList.push(..._d)
-      //         }
-      //         that.isLoad = 0
-      //         that.count += _d.length
-      //       } else {
-      //         console.log('no new data')
-      //         that.isLoad = 2
-      //       }
-      //     })
-      //     .catch(function (error) {
-      //       console.log(error)
-      //     })
-      // },
-      // // getPosition (i) {
-      // //   console.log(this.image_list[0].images[0])
-      // //   const h = this.image_list[i].images[0].height
-      // //   if (this.right_height > this.left_height) {
-      // //     this.left_height += h
-      // //     return 1
-      // //   }
-      // //   this.right_height += h
-      // //   return 0
-      // }
+      predivImage (e) {
+        // console.log(e)
+        const that = this
+        wx.previewImage({
+          current: that.imgList[e.identifier], // 当前显示图片的http链接
+          urls: that.imgList // 需要预览的图片http链接列表
+        })
+      }
     },
     mounted () {
       const p = this.$root.$mp.query.p
       if (!p) {
+        console.log('navigateBack')
         return wx.navigateBack()
-        // console.log('error')
       }
       this.p = p
       const app = getApp()
-      this.imgList = app.globalData.store.imgList
-      // this.getMovieData(id)
+      this.imgUrlList = app.globalData.store.imgUrlList
     }
     // async onPullDownRefresh () { // 下拉刷新
     //   this.isLoad = 1

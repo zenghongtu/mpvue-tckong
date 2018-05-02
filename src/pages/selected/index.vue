@@ -22,8 +22,6 @@
     data () {
       return {
         image_list: [],
-        right_height: 0,
-        left_height: 0,
         count: 0,
         isLoad: 0
       }
@@ -92,9 +90,9 @@
 </script>
 
 <style scoped>
-  .img_wrap_view{
-    /*column-count:2;*/
-    column-gap: 0px;
-    width: 100%;
-  }
+  /*.img_wrap_view{*/
+    /*!*column-count:2;*!*/
+    /*!*column-gap: 0px;*!*/
+    /*width: 100%;*/
+  /*}*/
 </style>
