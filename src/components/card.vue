@@ -214,7 +214,7 @@
 
   .line {
     width: 100%;
-    height: 2rpx;
-    background: #ccc;
+    height:25rpx;
+    background:rgba(85,85,85,0.1);
   }
 </style>
