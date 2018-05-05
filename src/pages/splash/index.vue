@@ -26,7 +26,7 @@
     },
     created () {
       const that = this
-      fly.get('http://127.0.0.1:9000/api/v1/wallpaper/?token=770fed4ca2aabd20ae9a5dd77471')
+      fly.get('https://api.heta.xyz/v1/wallpaper/?token=770fed4ca2aabd20ae9a5dd77471')
         .then(function (rsp) {
           if (rsp.data.status === 'ok') {
             const _d = rsp.data.data

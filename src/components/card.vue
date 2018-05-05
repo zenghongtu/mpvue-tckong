@@ -31,11 +31,14 @@
     <!--</div>-->
     <!--</navigator>-->
     <div class="top_wrap">
-      <text class="text_title">{{image_info.title}}</text>
-      <!--<text class="text_content" v-text="getContent"></text>-->
+      <text class="text_title">{{image_info.title}}\n</text>
     </div>
-    <navigator :url="'../detail/main?p='+image_info._id">
-      <image :src="imgUrlList[0]" mode="widthFix" class="card-image"/>
+    <navigator :url="'../detail/main?p='+image_info._id" style="position: relative;top:0;left:0;">
+      <image :src="'https://photo.tuchong.com/' + userId + '/f/' + image_info.images[0].img_id + '.jpg'" mode="widthFix"
+             class="card-image"/>
+      <image class="count_icon" src="../../static/images/pic.png"></image>
+      <text class="image_count">{{image_info.image_count}}</text>
+      <text class="text_content" v-show="getContent">{{getContent}}</text>
     </navigator>
     <div class="bottom_wrap">
       <image :src="image_info.author.icon" class="profile"></image>
@@ -66,8 +69,9 @@
       return {
         userId: this.image_info.author_id,
         // imgIdList: [],
-        imgCount: this.image_info.image_count,
-        imgUrlList: []
+        imgCount: this.image_info.image_count
+        // imgUrlList: [],
+        // direction: []
         // indicatorDots: false,
         // autoplay: false,
         // interval: 5000,
@@ -75,9 +79,16 @@
       }
     },
     computed: {
-      // getContent () {
-      //   return this.image_info.content.replace('\n', '')
-      // },
+      getContent () {
+        const c = this.image_info.content
+        let r = ''
+        if (!c) {
+          r = false
+        } else {
+          r = c.replace('\n', '')
+        }
+        return r
+      }
       // getTitle () {
       //   const t = this.image_info.title
       //   const r = t.length > 18 ? t.slice(0, 19) + '...' : t
@@ -106,21 +117,20 @@
       const len = imgList.image_count
 
       let i = 0
+      const imgIdList = []
+      const isEndways = []
       while (i < len) {
         // _imgIdList.push(imgList.images[i].img_id)
-        const _id = imgList.images[i].img_id
-        this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
+        const _img = imgList.images[i]
+        const _id = _img.img_id
+        // this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
+        imgIdList.push(_id)
+        isEndways.push(_img.height * 0.8 > _img.width)
         i++
       }
 
       let id_ = '' + imgList._id
-      // const app = getApp()
-      // app.globalData = {
-      //   store: {
-      //     [id_]: this.imgUrlList
-      //   }
-      // }
-      this.$root.$mp.appOptions[id_] = this.imgUrlList
+      this.$root.$mp.appOptions[id_] = {imgIdList, isEndways, userId: this.userId}
       // app.globalData.store[id_] = this.imgUrlList
       // console.log('--------')
       // console.log(this.image_info._id)
@@ -144,14 +154,30 @@
     float: left;
   }
 
+  .image_count {
+    position: absolute;
+    top: 80rpx;
+    left: 64rpx;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .count_icon {
+    position: absolute;;
+    top: 82rpx;
+    left: 16rpx;
+    width: 42rpx;
+    height: 44rpx;
+  }
+
   .text_content {
-    font-size: 30rpx;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    display: block;
-    padding-left: 10px;
-    line-height: 32px;
+    font-size: 24rpx;
+    padding:0 20rpx;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*white-space: nowrap;*/
+    /*display: block;*/
+    /*padding-left: 10px;*/
+    /*line-height: 32px;*/
   }
 
   .profile {
@@ -181,8 +207,9 @@
   }
 
   .bottom_wrap {
-    padding: 0 30rpx;
+    padding: 0 20rpx;
     height: 80rpx;
+    margin-bottom:-10rpx;
   }
 
   .line {

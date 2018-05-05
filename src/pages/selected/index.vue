@@ -5,10 +5,10 @@
     </view>
     <div v-if="isLoad == 1" class="weui-loadmore">
       <div class="weui-loading"></div>
-      <div class="weui-loadmore__tips">正在加载</div>
+      <div class="weui-loadmore__tips">正在拼命加载中...</div>
     </div>
     <div v-if="isLoad == 2" class="weui-loadmore weui-loadmore_line">
-      <div class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无数据</div>
+      <div class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无新鲜图片，晚点再来哦.</div>
     </div>
   </div>
 </template>
@@ -38,7 +38,7 @@
         if (direction === 'pull') {
           _count = 0
         }
-        fly.get('http://127.0.0.1:9000/api/v1/selected/?token=770fed4ca2aabd20ae9a5dd77471&limit=' + limit + '&skip=' + _count)
+        fly.get('https://api.heta.xyz/v1/selected/?token=770fed4ca2aabd20ae9a5dd77471&limit=' + limit + '&skip=' + _count)
           .then(function (rsp) {
             if (rsp.data.status === 'ok') {
               const _d = rsp.data.data

@@ -1,44 +1,27 @@
 <template>
-  <!--<div>-->
-    <!--<div v-for="i in imgUrlList" :key="i" v-text="i"></div>-->
-    <!--<image v-for="(v,i) in imgUrlList" :src="v" mode="widthFix" :key="i" class="card-image"/>-->
-    <!--<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">-->
-    <!--<div v-for="(url,index) in imgUrlList" :key="index">-->
-    <!--<swiper-item>-->
-    <!--<image :src="url" class="slide-image" mode="widthFix" />-->
-    <!--</swiper-item>-->
-    <!--</div>-->
-    <!--</swiper>-->
 
-    <!--<swiper style="width:100%;height: 100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">-->
-      <!--<div style="width:100%;height: 100vh;" v-for="(url,i) in imgUrlList" :key="i">-->
-        <!--<swiper-item style="width:100%;height: 100vh;">-->
-          <!--<image :src="url"  mode="widthFix" style="width:100%;"/>-->
-        <!--</swiper-item>-->
-      <!--</div>-->
-    <!--</swiper>-->
 
   <swiper style="height:100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">
-    <div  v-for="(url,i) in imgUrlList" :key="i">
+    <div  v-for="(imgId,i) in imgIdList" :key="i">
       <swiper-item >
-        <image :src="url"  mode="widthFix" style="width:100%;vertical-align:middle;"/>
+        <image :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />
+        <text>{{content}}</text>
+        <!--https://api.tuchong.com/images/ + imgIdList[i] + /exif-->
+        <!--<image :src="url"  mode="heightFix" else class="detail_img_rotate"/>-->
       </swiper-item>
     </div>
   </swiper>
 
-
-  <!--</div>-->
 </template>
 
 <script>
-  // import card from '@/components/card'
-  // import Fly from 'flyio/dist/npm/wx'
-
-  // let fly = new Fly()
   export default {
     data () {
       return {
-        imgUrlList: [],
+        imgIdList: [],
+        isEndways: [],
+        // content: '',
+        userId: '',
         indicatorDots: true,
         autoplay: false,
         interval: 5000,
@@ -74,8 +57,12 @@
         console.log('navigateBack')
         return wx.navigateBack()
       }
-      // this.p = p
-      this.imgUrlList = this.$root.$mp.appOptions[p]
+      const r = this.$root.$mp.appOptions[p]
+      this.imgIdList = r.imgIdList
+      this.userId = r.userId
+      this.isEndways = r.isEndways
+      // this.content = r.content
+      // console.log(r)
     }
     // async onPullDownRefresh () { // 下拉刷新
     //   this.isLoad = 1
@@ -96,6 +83,15 @@
   }
 </script>
 
-<style scoped>
+<style >
+  .detail_img{
+    width:100%;
+    /*vertical-align:middle;*/
+  }
+  .detail_img_c{
+    margin-top:200rpx;
+    width:100%;
+    /*vertical-align:middle;*/
+  }
 
 </style>
