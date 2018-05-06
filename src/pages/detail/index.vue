@@ -5,7 +5,7 @@
   <swiper style="height:100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">
     <div  v-for="(imgId,i) in imgIdList" :key="i">
       <swiper-item >
-        <text v-if="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" v-text="exifs[i]"></text>
+        <text v-show="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" v-text="exifs[i]"></text>
         <image @click="showExif" :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />
         <!--<text class="exif_text" v-for="info in exifs[i]" v-text="info"></text>-->
       </swiper-item>
@@ -67,7 +67,12 @@
             const data = rsp.data
             if (data.result === 'SUCCESS') {
               const e = data.exif['摘要']
-              that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
+              let info = ''
+              for (let item of e) {
+                info += `${item.desc}: ${item.content}\n`
+              }
+              // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
+              that.exifs[i] = info
             }
             // wx.hideLoading()
           })
