@@ -1,7 +1,7 @@
 <template>
   <div class="page_wrap">
 
-    <swiper style="height:100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" >
+    <swiper style="height:100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" >
       <div  v-for="(imgUrl,i) in imgUrls" :key="i">
         <swiper-item >
           <image @click="showExif" :src="imgUrl"  mode="widthFix"  class="img_full"/>
@@ -9,7 +9,7 @@
         </swiper-item>
       </div>
     </swiper>
-    <div class="text_wrap">
+    <div v-show="show" class="text_wrap">
       <text class="img_info">title: {{title}}</text><br/>
       <text class="img_info">author: {{author}} </text><br/>
       <text class="img_info">date: {{crt_time}}</text>
@@ -37,7 +37,8 @@
         // content: '',
         crt_time: '',
         author: '',
-        imageCount: 1
+        // imageCount: 1,
+        show: false
       }
     },
     methods: {
@@ -82,6 +83,7 @@
                 break
               }
             }
+            that.show = true
           } else {
             console.log('status is error')
             wx.showToast({

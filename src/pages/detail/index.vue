@@ -5,7 +5,7 @@
   <swiper style="height:100vh;" :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange">
     <div  v-for="(imgId,i) in imgIdList" :key="i">
       <swiper-item >
-        <text v-show="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" v-text="exifs[i]"></text>
+        <text v-show="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" >{{exifs[i]}}</text>
         <!--<button open-type="share" :id="imgId">share</button>-->
         <image @click="showExif" :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />
         <!--<text class="exif_text" v-for="info in exifs[i]" v-text="info"></text>-->
@@ -39,7 +39,7 @@
         exifs: [],
         userId: '',
         title: '图虫精选',
-        show: true
+        show: false
       }
     },
     onShareAppMessage (e) {
@@ -85,11 +85,16 @@
         const i = e.mp.detail.current
         this.getExifData(i + 1)
         this.current = i
+        // this.show = !this.show
       },
       getExifData (i) {
         if (!this.imgIdList[i]) {
           return false
         }
+        // if (this.show === true){
+        //   this.show = false
+        // }
+        this.show = !this.show
         const that = this
         fly.get(`https://api.tuchong.com/images/${that.imgIdList[i]}/exif`)
           .then(function (rsp) {
@@ -104,8 +109,9 @@
                 }
               // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
                 that.exifs[i] = info
+                that.show = !that.show
               } else {
-                that.exifs[i] = '获取相片信息失败，请尝试下拉刷新.'
+                that.exifs[i] = '获取相片信息失败，请稍后尝试'
               }
             }
             // wx.hideLoading()
@@ -131,6 +137,8 @@
     },
     mounted () {
       const id_ = this.$root.$mp.query.id
+      this.current = 0
+      this.exifs = []
       if (!id_) {
         console.log('navigateBack')
         return wx.navigateBack()
@@ -191,7 +199,7 @@
     /*vertical-align:middle;*/
   }
   .detail_img_c{
-    margin-top:200rpx;
+    margin-top:100rpx;
     width:100%;
     /*vertical-align:middle;*/
   }
