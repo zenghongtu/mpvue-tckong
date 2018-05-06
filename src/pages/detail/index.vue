@@ -101,7 +101,7 @@
               // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
                 that.exifs[i] = info
               } else {
-                that.exifs[i] = '相片信息缺失'
+                that.exifs[i] = '获取相片信息失败，请下拉刷新'
               }
             }
             // wx.hideLoading()
