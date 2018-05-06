@@ -11,11 +11,10 @@
     </swiper>
     <div class="text_wrap">
       <text class="img_info">title: {{title}}</text><br/>
-      <!--<text class="img_info">&#45;&#45; {{content}}</text><br/>-->
       <text class="img_info">author: {{author}} </text><br/>
       <text class="img_info">date: {{crt_time}}</text>
     </div>
-    <button class="splash_start" @click="handleStart" > 立即体验 </button>
+    <button class="splash_start" @click="handleStart" > 点此进入 </button>
     <text class="copyright_text">©此相片(册)由图虫摄影爱好者分享，版权归原创作者所有</text>
   </div>
 </template>
@@ -35,7 +34,7 @@
         circular: false,
         imgUrls: [],
         title: '',
-        content: '',
+        // content: '',
         crt_time: '',
         author: '',
         imageCount: 1
@@ -58,6 +57,10 @@
       // }
     },
     created () {
+      wx.showLoading({
+        title: '加载中...',
+        mask: true
+      })
       const imgUrls = this.imgUrls
       const that = this
       fly.get('https://api.heta.xyz/v1/wallpaper/?token=770fed4ca2aabd20ae9a5dd77471')
@@ -81,11 +84,24 @@
             }
           } else {
             console.log('status is error')
+            wx.showToast({
+              title: '无法访问，请稍后尝试',
+              mask: true,
+              icon: 'none',
+              duration: 1500
+            })
           }
         })
         .catch(function (error) {
           console.log(error)
+          wx.showToast({
+            title: '网络出错，请稍后尝试',
+            mask: true,
+            icon: 'none',
+            duration: 1500
+          })
         })
+      wx.hideLoading()
     }
   }
 

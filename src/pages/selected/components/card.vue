@@ -125,7 +125,7 @@
         const _id = _img.img_id
         // this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
         imgIdList.push(_id)
-        isEndways.push(_img.width / _img.height < 0.75)
+        isEndways.push(_img.width / _img.height < 0.85)
         i++
       }
 
