@@ -174,14 +174,14 @@
 
   .image_count {
     position: absolute;
-    top: 80rpx;
+    top: 26rpx;
     left: 64rpx;
     color: rgba(255, 255, 255, 0.5);
   }
 
   .count_icon {
     position: absolute;;
-    top: 82rpx;
+    top: 30rpx;
     left: 16rpx;
     width: 42rpx;
     height: 44rpx;

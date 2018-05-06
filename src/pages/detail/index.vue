@@ -14,7 +14,8 @@
   </swiper>
       <text class="img_order">{{current+1}}/{{imgCount}}</text>
       <button open-type="share" class="share_btn"  type="default"  plain="true" >Share</button>
-      <button @click="predivImage"  class="predivImage_btn"  type="default" plain="true" >Preview</button>
+      <!--<button @click="predivImage"  class="predivImage_btn"  type="default" plain="true" >Preview</button>-->
+      <button @click="wallpaperHandler"  class="wallpaper_btn"  type="default" plain="true" >Wallpaper</button>
 </div>
 
 </template>
@@ -38,7 +39,7 @@
         exifs: [],
         userId: '',
         title: '图虫精选',
-        show: false
+        show: true
       }
     },
     onShareAppMessage (e) {
@@ -62,13 +63,13 @@
     computed: {
     },
     methods: {
-      predivImage (e) {
+      wallpaperHandler (e) {
         // console.log(e)
         // console.log('1')
         const imgUrlList = []
-        const userId = this.userId
-        for (let item of this.imgIdList) {
-          imgUrlList.push('https://photo.tuchong.com/' + userId + '/f/' + item + '.jpg')
+        // const userId = this.userId
+        for (let imgId of this.imgIdList) {
+          imgUrlList.push(`https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/${imgId}~cs_1080x1920_q75.jpeg`)
         }
         const i = this.current
         wx.previewImage({
@@ -222,7 +223,7 @@
     width:25%;
   }
 
-  .predivImage_btn{
+  .wallpaper_btn{
     position:absolute;
     bottom:9rpx;
     height:60rpx;

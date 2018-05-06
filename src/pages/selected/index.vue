@@ -45,20 +45,22 @@
               if (direction === 'pull') {
                 if (imageList === []) {
                   imageList.push(..._d)
+                  that.count += _d.length
                 } else {
-                  // todo?
-                  // const len = _d.length
-                  // let f = 0
-                  // for (let i=0;i<len;i++){
-                  //   if (_d[i]._id )
-                  // }
-                  imageList.unshift(..._d)
+                  for (let item of _d) {
+                    if (item._id in imageList) {
+                      break
+                    } else {
+                      imageList.unshift(item)
+                      that.count += 1
+                    }
+                  }
                 }
               } else {
                 imageList.push(..._d)
+                that.count += _d.length
               }
               that.isLoad = 0
-              that.count += _d.length
             } else {
               console.log('no new data')
               that.isLoad = 2
