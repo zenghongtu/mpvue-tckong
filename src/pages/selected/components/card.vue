@@ -31,9 +31,9 @@
     <!--</div>-->
     <!--</navigator>-->
     <div class="top_wrap">
-      <text class="text_title">{{image_info.title}}\n</text>
+      <text class="text_title">{{image_info.title}}</text>
     </div>
-    <navigator :url="'../detail/main?id='+image_info._id" style="position: relative;top:0;left:0;">
+    <navigator class="img_nav" :url="'../detail/main?id='+image_info._id" >
       <image :src="'https://photo.tuchong.com/' + userId + '/f/' + image_info.images[0].img_id + '.jpg'" mode="widthFix"
              class="card-image"/>
       <image class="count_icon" src="../../static/images/pic.png"></image>
@@ -132,7 +132,7 @@
       let id_ = '' + imageInfo._id
       wx.setStorage({
         key: id_,
-        data: {imgIdList, isEndways, userId: this.userId}
+        data: {imgIdList, isEndways, userId: this.userId, title: imageInfo.title}
       })
       // this.$root.$mp.appOptions[id_] = {imgIdList, isEndways, userId: this.userId}
       // app.globalData.store[id_] = this.imgUrlList
@@ -150,12 +150,26 @@
   }
 
   .top_wrap {
-    padding: 15rpx 10rpx 0;
+    padding: 34rpx 0;
+    position: relative;
+    top:0;
+    left:0;
   }
 
   .text_title {
-    font-size: 40rpx;
-    float: left;
+    color:rgba(0,0,0,0.7);
+    position:absolute;
+    top:10rpx;
+    left:50%;
+    transform:translateX(-50%);
+    width:100%;
+    text-align:center;
+  }
+
+  .img_nav{
+    position: relative;
+    top:0;
+    left:0;
   }
 
   .image_count {

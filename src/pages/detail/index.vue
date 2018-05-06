@@ -12,8 +12,9 @@
       </swiper-item>
     </div>
   </swiper>
-      <button open-type="share" class="share_btn"  type="default" plain="true" >分享</button>
-      <button @click="predivImage"  class="predivImage_btn" type="default" plain="true" >预览</button>
+      <text class="img_order">{{current+1}}/{{imgCount}}</text>
+      <button open-type="share" class="share_btn"  type="default"  plain="true" >Share</button>
+      <button @click="predivImage"  class="predivImage_btn"  type="default" plain="true" >Preview</button>
 </div>
 
 </template>
@@ -24,17 +25,19 @@
   export default {
     data: function () {
       return {
-        indicatorDots: true,
+        indicatorDots: false,
         autoplay: false,
         interval: 5000,
         duration: 900,
         circular: false,
         // loading: true,
         imgIdList: [],
+        imgCount: 1,
         isEndways: [],
         current: 0,
         exifs: [],
         userId: '',
+        title: '图虫精选',
         show: false
       }
     },
@@ -42,11 +45,11 @@
       // const imgId = e.target.id
       // const url = 'https://photo.tuchong.com/' + this.userId + '/f/' + imgId + '.jpg'
       return {
-        title: '图虫精选',
+        title: this.title,
         // imageUrl: url,
         success: function (res) {
           wx.showToast({
-            title: '转发成功',
+            title: '分享成功！',
             icon: 'success',
             duration: 400
           })
@@ -101,7 +104,7 @@
               // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
                 that.exifs[i] = info
               } else {
-                that.exifs[i] = '获取相片信息失败，请下拉刷新'
+                that.exifs[i] = '获取相片信息失败，请尝试下拉刷新.'
               }
             }
             // wx.hideLoading()
@@ -137,10 +140,15 @@
         const r = wx.getStorageSync(id_)
         if (r) {
           this.imgIdList = r.imgIdList
+          this.imgCount = r.imgIdList.length
           this.userId = r.userId
-          this.isEndways = r.isEndways
           this.getExifData(0)
           this.getExifData(1)
+          this.isEndways = r.isEndways
+          this.title = r.title
+          wx.setNavigationBarTitle({
+            title: r.title
+          })
         }
       } catch (e) {
         console.log('error:wx.getStorageSync-' + id_)
@@ -210,7 +218,8 @@
     height:60rpx;
     font-size:25rpx;
     line-height:60rpx;
-    right:25rpx;
+    right:30rpx;
+    width:25%;
   }
 
   .predivImage_btn{
@@ -219,7 +228,19 @@
     height:60rpx;
     font-size:25rpx;
     line-height:60rpx;
-    left:25rpx;
+    left:30rpx;
+    width:25%;
+  }
+
+  .img_order{
+    position:absolute;
+    bottom:9rpx;
+    height:60rpx;
+    font-size:35rpx;
+    line-height:60rpx;
+    left:50%;
+    transform: translateX(-50%);
+    color:rgba(85,85,85,0.9)
   }
 
 </style>
