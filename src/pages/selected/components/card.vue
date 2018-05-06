@@ -33,7 +33,7 @@
     <div class="top_wrap">
       <text class="text_title">{{image_info.title}}\n</text>
     </div>
-    <navigator :url="'../detail/main?p='+image_info._id" style="position: relative;top:0;left:0;">
+    <navigator :url="'../detail/main?id='+image_info._id" style="position: relative;top:0;left:0;">
       <image :src="'https://photo.tuchong.com/' + userId + '/f/' + image_info.images[0].img_id + '.jpg'" mode="widthFix"
              class="card-image"/>
       <image class="count_icon" src="../../static/images/pic.png"></image>
@@ -112,16 +112,16 @@
       // }
     },
     mounted () {
-      const imgList = this.image_info
+      const imageInfo = this.image_info
 
-      const len = imgList.image_count
+      const len = imageInfo.image_count
 
       let i = 0
       const imgIdList = []
       const isEndways = []
       while (i < len) {
-        // _imgIdList.push(imgList.images[i].img_id)
-        const _img = imgList.images[i]
+        // _imgIdList.push(imageInfo.images[i].img_id)
+        const _img = imageInfo.images[i]
         const _id = _img.img_id
         // this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
         imgIdList.push(_id)
@@ -129,8 +129,12 @@
         i++
       }
 
-      let id_ = '' + imgList._id
-      this.$root.$mp.appOptions[id_] = {imgIdList, isEndways, userId: this.userId}
+      let id_ = '' + imageInfo._id
+      wx.setStorage({
+        key: id_,
+        data: {imgIdList, isEndways, userId: this.userId}
+      })
+      // this.$root.$mp.appOptions[id_] = {imgIdList, isEndways, userId: this.userId}
       // app.globalData.store[id_] = this.imgUrlList
       // console.log('--------')
       // console.log(this.image_info._id)

@@ -70,7 +70,7 @@
         const i = this.current
         wx.previewImage({
           current: imgUrlList[i],
-          urls: imgUrlList[i],
+          urls: imgUrlList,
           fail (e) {
             console.log(e)
           }
@@ -126,20 +126,36 @@
 
     },
     mounted () {
-      const p = this.$root.$mp.query.p
-      if (!p) {
+      const id_ = this.$root.$mp.query.id
+      if (!id_) {
         console.log('navigateBack')
         return wx.navigateBack()
       }
       // this.showLoading()
-      const r = this.$root.$mp.appOptions[p]
-      this.imgIdList = r.imgIdList
-      this.userId = r.userId
-      this.isEndways = r.isEndways
-      // this.content = r.content
-      // console.log(r)
-      this.getExifData(0)
-      this.getExifData(1)
+      // const r = this.$root.$mp.appOptions[id_]
+      try {
+        const r = wx.getStorageSync(id_)
+        if (r) {
+          this.imgIdList = r.imgIdList
+          this.userId = r.userId
+          this.isEndways = r.isEndways
+          this.getExifData(0)
+          this.getExifData(1)
+        }
+      } catch (e) {
+        console.log('error:wx.getStorageSync-' + id_)
+        // console.log(e)
+      }
+      // wx.getStorageSync({
+      //   key: id_,
+      //   success (e) {
+      //     console.log(1)
+      //     console.log(e)
+      //   },
+      //   fail () {
+      //
+      //   }
+      // })
     }
     // async onPullDownRefresh () { // 下拉刷新
     //   this.isLoad = 1
