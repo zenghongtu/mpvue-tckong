@@ -8,7 +8,7 @@
       <div class="weui-loadmore__tips">正在拼命加载中...</div>
     </div>
     <div v-if="isLoad == 2" class="weui-loadmore weui-loadmore_line">
-      <div class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无新鲜图片，晚点再来哦.</div>
+      <div class="weui-loadmore__tips weui-loadmore__tips_in-line">暂无新鲜相片，晚点再来哦.</div>
     </div>
   </div>
 </template>
@@ -82,7 +82,6 @@
     },
 
     mounted () {
-      // 调用应用实例的方法获取全局数据
       this.getSelectedData()
     }
 
