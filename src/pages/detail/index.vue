@@ -6,12 +6,14 @@
     <div  v-for="(imgId,i) in imgIdList" :key="i">
       <swiper-item >
         <text v-show="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" v-text="exifs[i]"></text>
+        <!--<button open-type="share" :id="imgId">share</button>-->
         <image @click="showExif" :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />
         <!--<text class="exif_text" v-for="info in exifs[i]" v-text="info"></text>-->
       </swiper-item>
     </div>
   </swiper>
-  <!--<button @click="showExif" class="img_btn" type="default" plain="true" :loading="loading" >图片参数</button>-->
+      <button open-type="share" class="share_btn"  type="default" plain="true" >分享</button>
+      <button @click="predivImage"  class="predivImage_btn" type="default" plain="true" >预览</button>
 </div>
 
 </template>
@@ -36,20 +38,44 @@
         show: false
       }
     },
+    onShareAppMessage (e) {
+      // const imgId = e.target.id
+      // const url = 'https://photo.tuchong.com/' + this.userId + '/f/' + imgId + '.jpg'
+      return {
+        title: '图虫精选',
+        // imageUrl: url,
+        success: function (res) {
+          wx.showToast({
+            title: '转发成功',
+            icon: 'success',
+            duration: 400
+          })
+        }
+      }
+    },
     // components: {
     //   card
     // },
     computed: {
     },
     methods: {
-      // predivImage (e) {
-      //   // console.log(e)
-      //   const that = this
-      //   wx.previewImage({
-      //     current: that.imgList[e.identifier], // 当前显示图片的http链接
-      //     urls: that.imgList // 需要预览的图片http链接列表
-      //   })
-      // }
+      predivImage (e) {
+        // console.log(e)
+        // console.log('1')
+        const imgUrlList = []
+        const userId = this.userId
+        for (let item of this.imgIdList) {
+          imgUrlList.push('https://photo.tuchong.com/' + userId + '/f/' + item + '.jpg')
+        }
+        const i = this.current
+        wx.previewImage({
+          current: imgUrlList[i],
+          urls: imgUrlList[i],
+          fail (e) {
+            console.log(e)
+          }
+        })
+      },
       swiperChange (e) {
         // this.showLoading()
         const i = e.mp.detail.current
@@ -68,11 +94,15 @@
             if (data.result === 'SUCCESS') {
               const e = data.exif['摘要']
               let info = ''
-              for (let item of e) {
-                info += `${item.desc}: ${item.content}\n`
-              }
+              if (e) {
+                for (let item of e) {
+                  info += `${item.desc}: ${item.content}\n`
+                }
               // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
-              that.exifs[i] = info
+                that.exifs[i] = info
+              } else {
+                that.exifs[i] = '相片信息缺失'
+              }
             }
             // wx.hideLoading()
           })
@@ -158,13 +188,22 @@
     background-color: rgba(85,85,85,0.1);
   }
 
-  .img_btn{
+  .share_btn{
     position:absolute;
-    bottom:48rpx;
-    width:100%;
+    bottom:9rpx;
     height:60rpx;
-    font-size:27rpx;
+    font-size:25rpx;
     line-height:60rpx;
+    right:25rpx;
+  }
+
+  .predivImage_btn{
+    position:absolute;
+    bottom:9rpx;
+    height:60rpx;
+    font-size:25rpx;
+    line-height:60rpx;
+    left:25rpx;
   }
 
 </style>
