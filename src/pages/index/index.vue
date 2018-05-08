@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import card from '../selected/components/card'
+import card from '../../components/card'
 
 export default {
   data () {

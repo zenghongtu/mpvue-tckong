@@ -77,7 +77,7 @@
             let i = 0
             for (let item of imgIds) {
               // https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/15562999~cs_1080x1920_q75.jpeg
-              imgUrls.push(`https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/${item.img_id}~cs_1080x1920_q75.jpeg`)
+              imgUrls.push(`https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/${item.img_id}~cs_360x640_q75.jpeg`)
               i++
               if (i > 3) {
                 break

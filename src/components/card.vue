@@ -33,9 +33,12 @@
     <div class="top_wrap">
       <text class="text_title">{{image_info.title}}</text>
     </div>
-    <navigator class="img_nav" :url="'../detail/main?id='+image_info._id" >
-      <image :src="'https://photo.tuchong.com/' + userId + '/f/' + image_info.images[0].img_id + '.jpg'" mode="widthFix"
-             class="card-image"/>
+    <navigator class="img_nav" :url="'../detail/main?id='+image_info._id">
+      <!--<image :src="'https://photo.tuchong.com/' + userId + '/f/' + image_info.images[0].img_id + '.jpg'" mode="widthFix"-->
+      <image
+        :src="'https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/'+image_info.images[0].img_id+'~cs_360x640_q75.jpeg'"
+        mode="widthFix"
+        class="card-image"/>
       <image class="count_icon" src="../../static/images/pic.png"></image>
       <text class="image_count">{{image_info.image_count}}</text>
       <text class="text_content" v-show="getContent">{{getContent}}</text>
@@ -47,7 +50,7 @@
         <br/>
         <text class="text_time">{{image_info.crt_time}}</text>
         <div class="info_wrap">
-          <text> 🔥 {{image_info.views}}</text>
+          <text v-show="viewHandler"> 🔥 {{image_info.views}}</text>
           <text> 👍️ {{image_info.favorites}}</text>
           <text> 🤔 {{image_info.comments }}</text>
         </div>
@@ -88,6 +91,9 @@
           r = c.replace('\n', '')
         }
         return r
+      },
+      viewHandler () {
+        return (this.image_info.views !== undefined)
       }
       // getTitle () {
       //   const t = this.image_info.title
@@ -124,8 +130,10 @@
         const _img = imageInfo.images[i]
         const _id = _img.img_id
         // this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
-        imgIdList.push(_id)
-        isEndways.push(_img.width / _img.height < 0.85)
+        if (_img.width / _img.height < 1.2) {
+          imgIdList.push(_id)
+        }
+        // isEndways.push(_img.width / _img.height < 0.85)
         i++
       }
 
@@ -152,24 +160,24 @@
   .top_wrap {
     padding: 34rpx 0;
     position: relative;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
   }
 
   .text_title {
-    color:rgba(0,0,0,0.7);
-    position:absolute;
-    top:10rpx;
-    left:50%;
-    transform:translateX(-50%);
-    width:100%;
-    text-align:center;
+    color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    top: 10rpx;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    text-align: center;
   }
 
-  .img_nav{
+  .img_nav {
     position: relative;
-    top:0;
-    left:0;
+    top: 0;
+    left: 0;
   }
 
   .image_count {
@@ -189,7 +197,7 @@
 
   .text_content {
     font-size: 24rpx;
-    padding:0 20rpx;
+    padding: 0 20rpx;
     /*overflow: hidden;*/
     /*text-overflow: ellipsis;*/
     /*white-space: nowrap;*/
@@ -227,12 +235,12 @@
   .bottom_wrap {
     padding: 0 20rpx;
     height: 80rpx;
-    margin-bottom:-10rpx;
+    margin-bottom: -10rpx;
   }
 
   .line {
     width: 100%;
-    height:25rpx;
-    background:rgba(85,85,85,0.1);
+    height: 25rpx;
+    background: rgba(85, 85, 85, 0.1);
   }
 </style>

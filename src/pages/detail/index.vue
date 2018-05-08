@@ -7,15 +7,16 @@
       <swiper-item >
         <text v-show="show" :class="isEndways[i]?'exif_text_base exif_text_white':'exif_text_base exif_text_black'" >{{exifs[i]}}</text>
         <!--<button open-type="share" :id="imgId">share</button>-->
-        <image @click="showExif" :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />
+        <!--<image @click="showExif" :src="'https://photo.tuchong.com/' + userId + '/f/' + imgId + '.jpg'"  mode="widthFix"  :class="isEndways[i]?'detail_img':'detail_img_c'" />-->
+        <image @click="showExif" :src="'https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/'+imgId+'~cs_1080x1920.jpeg'"  mode="widthFix"  class="detail_img" />
         <!--<text class="exif_text" v-for="info in exifs[i]" v-text="info"></text>-->
       </swiper-item>
     </div>
   </swiper>
       <text class="img_order">{{current+1}}/{{imgCount}}</text>
-      <button open-type="share" class="share_btn"  type="default"  plain="true" >Share</button>
+      <button v-show="show" open-type="share" class="share_btn" >Share</button>
       <!--<button @click="predivImage"  class="predivImage_btn"  type="default" plain="true" >Preview</button>-->
-      <button @click="wallpaperHandler"  class="wallpaper_btn"  type="default" plain="true" >Wallpaper</button>
+      <button v-show="show" @click="wallpaperHandler"  class="wallpaper_btn" >Original</button>
 </div>
 
 </template>
@@ -46,7 +47,7 @@
       // const imgId = e.target.id
       // const url = 'https://photo.tuchong.com/' + this.userId + '/f/' + imgId + '.jpg'
       return {
-        title: this.title,
+        title: '来自图虫·精选：' + this.title,
         // imageUrl: url,
         success: function (res) {
           wx.showToast({
@@ -69,7 +70,7 @@
         const imgUrlList = []
         // const userId = this.userId
         for (let imgId of this.imgIdList) {
-          imgUrlList.push(`https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/${imgId}~cs_1080x1920_q75.jpeg`)
+          imgUrlList.push(`https://lf1-tccdn-tos.pstatp.com/img/tuchong.fullscreen/${imgId}~cs.jpeg`)
         }
         const i = this.current
         wx.previewImage({
@@ -94,7 +95,7 @@
         // if (this.show === true){
         //   this.show = false
         // }
-        this.show = !this.show
+        // this.show = !this.show
         const that = this
         fly.get(`https://api.tuchong.com/images/${that.imgIdList[i]}/exif`)
           .then(function (rsp) {
@@ -109,7 +110,7 @@
                 }
               // that.exifs[i] = `${e[5].content}\n${e[0].content}\n${e[1].content}\n${e[2].content}\n${e[3].content}\n${e[4].content}`
                 that.exifs[i] = info
-                that.show = !that.show
+                // that.show = !that.show
               } else {
                 that.exifs[i] = '获取相片信息失败，请稍后尝试'
               }
@@ -136,6 +137,7 @@
 
     },
     mounted () {
+      this.show = false
       const id_ = this.$root.$mp.query.id
       this.current = 0
       this.exifs = []
@@ -229,6 +231,8 @@
     line-height:60rpx;
     right:30rpx;
     width:25%;
+    color:rgba(255,255,255,0.8);
+    background-color: rgba(85,85,85,0.1);
   }
 
   .wallpaper_btn{
@@ -239,6 +243,8 @@
     line-height:60rpx;
     left:30rpx;
     width:25%;
+    color:rgba(255,255,255,0.8);
+    background-color: rgba(85,85,85,0.1);
   }
 
   .img_order{

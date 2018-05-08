@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import card from './components/card'
+  import card from '@/components/card'
   import Fly from 'flyio/dist/npm/wx'
 
   let fly = new Fly()

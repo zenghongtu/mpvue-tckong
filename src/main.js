@@ -17,7 +17,7 @@ export default {
     window: {
       backgroundTextStyle: 'light',
       navigationBarBackgroundColor: '#fff',
-      navigationBarTitleText: '图虫·精选',
+      navigationBarTitleText: '图虫·精选✨',
       navigationBarTextStyle: 'black'
     },
     tabBar: {
