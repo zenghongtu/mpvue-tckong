@@ -1,36 +1,8 @@
 <template>
 
   <div class="wrap">
-    <!--{{image_info.title}}-->
-    <!--<navigator :url="'../detail/main?p='+image_info.author_id" class="weui-media-box weui-media-box_appmsg"-->
-    <!--hover-class="weui-cell_active">-->
-    <!--<div v-for="item in imgIdList" :key="item" style="width:100%;" class="weui-media-box__hd weui-media-box__hd_in-appmsg">-->
-    <!--<image class="weui-media-box__thumb" :src="icon60" />-->
-    <!--<image  class="weui-media-box__thumb" style="width: 100%; background-color: #eeeeee;"  mode="widthFix"-->
-    <!--:src="'https://photo.tuchong.com/'+userId+'/f/'+item+'.jpg'" />-->
-    <!--</div>-->
-    <!--<swiper :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval" :duration="duration" :circular="circular" @change="swiperChange" @animationfinish="animationfinish">-->
-    <!--<div v-for="(item,index) in imgIdList" :key="index" @click="predivImage">-->
-    <!--<swiper-item>-->
-    <!--<image :src="'https://photo.tuchong.com/'+userId+'/f/'+item+'.jpg'" class="slide-image" />-->
-    <!--</swiper-item>-->
-    <!--</div>-->
-    <!--</swiper>-->
 
-    <!--<swiper indicator-dots="{{indicatorDots}}"-->
-    <!--autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">-->
-    <!--<block v-for="(item,index) in imgIdList" :key="index">-->
-    <!--<swiper-item>-->
-    <!--<image src="'https://photo.tuchong.com/'+userId+'/f/'+item+'.jpg'" class="slide-image" width="355" height="150"/>-->
-    <!--</swiper-item>-->
-    <!--</block>-->
-    <!--</swiper>-->
-    <!--<div class="weui-media-box__bd weui-media-box__bd_in-appmsg">-->
-    <!--<div class="weui-media-box__title">{{image_info.title}}</div>-->
-    <!--<div class="weui-media-box__desc">{{image_info.content}}</div>-->
-    <!--</div>-->
-    <!--</navigator>-->
-    <div class="top_wrap">
+    <div @click="top_wrap_handler"  class="top_wrap">
       <text class="text_title">{{image_info.title}}</text>
     </div>
     <navigator class="img_nav" :url="'../detail/main?id='+image_info._id">
@@ -102,22 +74,25 @@
       // }
     },
     methods: {
-      // getImgurl (detail) {
-      //   const info = detail
-      //   const userId = info.user_id
-      //   const imgId = info.img_id
-      //   return `https://photo.tuchong.com/${userId}/f/${imgId}.jpg`
-      // }
-      // predivImage (e) {
-      //   console.log(e)
-      //   const that = this
-      //   wx.previewImage({
-      //     current: that.imgUrlList[e.identifier], // 当前显示图片的http链接
-      //     urls: that.imgUrlList // 需要预览的图片http链接列表
-      //   })
-      // }
+      top_wrap_handler () {
+        wx.setClipboardData({
+          data: this.image_info.url,
+          success: function (res) {
+            wx.getClipboardData({
+              success: function (res) {
+                // console.log(res.data)
+                wx.showToast({
+                  title: '图虫地址成功复制到剪切板',
+                  icon: 'none',
+                  duration: 1200
+                })
+              }
+            })
+          }
+        })
+      }
     },
-    mounted () {
+    mounted: function () {
       const imageInfo = this.image_info
 
       const len = imageInfo.image_count
@@ -130,9 +105,9 @@
         const _img = imageInfo.images[i]
         const _id = _img.img_id
         // this.imgUrlList.push('https://photo.tuchong.com/' + this.userId + '/f/' + _id + '.jpg')
-        if (_img.width / _img.height < 1.2) {
-          imgIdList.push(_id)
-        }
+        // if (_img.width / _img.height < 1.2) {
+        imgIdList.push(_id)
+        // }
         // isEndways.push(_img.width / _img.height < 0.85)
         i++
       }

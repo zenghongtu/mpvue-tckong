@@ -32,6 +32,12 @@ export default {
           iconPath: 'static/images/icon_nav_cell.png',
           selectedIconPath: 'static/images/icon_nav_cell.png'
         },
+        // {
+        //   pagePath: 'pages/wallpaper/main',
+        //   text: '随便看看',
+        //   iconPath: 'static/images/icon_nav_toast.png',
+        //   selectedIconPath: 'static/images/icon_nav_toast.png'
+        // },
         {
           pagePath: 'pages/search/main',
           text: '搜索',
@@ -40,7 +46,7 @@ export default {
         },
         {
           pagePath: 'pages/profile/main',
-          text: '个人中心',
+          text: '留言',
           iconPath: 'static/images/icon_nav_toast.png',
           selectedIconPath: 'static/images/icon_nav_toast.png'
         }

@@ -7,8 +7,10 @@
     </view>
     <div v-show="show_result" class="search_body">
       <view class="img_wrap_view" v-for="(item,index) in image_list" :key="item._id">
-        <card :image_info="item"></card>
-      </view>
+      <card :image_info="item"></card>
+    </view>
+      <!--<card :image_info="image_list[0]"></card>-->
+
       <div v-if="isLoad == 1" class="weui-loadmore">
         <div class="weui-loading"></div>
         <div class="weui-loadmore__tips">正在拼命加载中...</div>
@@ -37,7 +39,9 @@
         image_list: [],
         page: 1,
         isLoad: 0,
-        posts: 0
+        posts: 0,
+        count: 0,
+        isSelect: 0
       }
     },
     methods: {
@@ -52,6 +56,10 @@
               const _d = data.post_list
               that.posts = data.posts
               const newList = []
+              if (that.isSelect) {
+                imageList.pop()
+                that.isSelect = 0
+              }
               for (let item of _d) {
                 item.crt_time = item.published_at
                 item._id = item.post_id
@@ -76,6 +84,28 @@
             console.log(error)
           })
       },
+      getSelectedData () {
+        const that = this
+        const imageList = this.image_list
+        fly.get('https://api.heta.xyz/v1/wallpaper/?token=770fed4ca2aabd20ae9a5dd77471')
+          .then(function (rsp) {
+            if (rsp.data.status === 'ok') {
+              const _d = rsp.data.data
+              imageList.pop()
+              imageList.push(..._d)
+              // console.log(imageList)
+              that.isLoad = 0
+              that.show_result = true
+              that.isSelect = 1
+            } else {
+              console.log('no new data')
+              that.isLoad = 2
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
 
       resetData () {
         this.image_list = []
@@ -86,18 +116,29 @@
         this.getSearchData('button')
       }
     },
-    onReachBottom () { // 上拉加载
+    async onPullDownRefresh () { // 下拉刷新
       this.isLoad = 1
-      this.getSearchData()
+      // this.clearState()
+      await this.getSelectedData()
+      wx.stopPullDownRefresh()
+    },
+    // onReachBottom () { // 上拉加载
+    //   this.isLoad = 1
+    //   this.getSearchData()
+    // }
+
+    mounted: function () {
+      this.getSelectedData()
     }
   }
 </script>
 
 <style>
-  .search_wrap{
-    width:100%;
+  .search_wrap {
+    width: 100%;
     height: 100vh;
   }
+
   .search_header {
     padding: 15rpx 30rpx;
   }
@@ -121,12 +162,12 @@
     margin-left: 10rpx;
   }
 
-  .search_body{
-    width:100%;
-    height:100%;
+  .search_body {
+    width: 100%;
+    height: 100%;
   }
 
-  .img_wrap_view{
+  .img_wrap_view {
 
   }
 
